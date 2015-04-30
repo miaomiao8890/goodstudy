@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>积分兑换</title>
+{% endblock %}
+
+{% block main_content %}
+<div class="full-container" id="redeem-points-container">
+  <div class="order-detail">
+  <img src="{{ item.item.thumbnail }}" alt="" class="order-product-image">
+  <div class="order-product-info">
+    <p class="order-product-name">{{ item.item.title }}</p>
+    <em class="order-points-info">￥{{ item.item.price }}积分</em>
+  </div>
+  </div>
+  <form action="{{ url_for('store.buy_result') }}" method="POST">
+  <input type="hidden" name="_csrf_token" class="hidden" value="{{ csrf_token() }}">
+  <div class="redeem-points-wide-list">
+    <input type="text" placeholder="手机号" name="phone" id="phone">
+    <button id="get-auth-code-button">获取验证码</button>
+    <p class="error" id="phone-error">&nbsp;</p>
+  </div>
+  <div class="redeem-points-wide-list">
+    <input type="text" placeholder="验证码" disabled="" id="captcha" name="captcha">
+    <button id="bind-phone-button" disabled="">确认</button>
+    <p class="error" id="send-captcha-error">&nbsp;</p>
+  </div>
+  <div class="redeem-points-wide-list">
+    <input type="text" class="input-wide" placeholder="姓名" disabled="" id="name" name="name">
+    <p id="name-error" class="error">&nbsp;</p>
+  </div>
+  {% if item.item.need_address %}
+  <div class="redeem-points-wide-list">
+    <input type="text" class="input-wide" placeholder="地址" disabled="" id="address" name="address">
+    <p id="address-error" class="error">&nbsp;</p>
+  </div>
+  {% endif %}
+  {% if size %}
+  <div class="redeem-points-wide-list">
+    <span class="confirm-label">尺码：</span>
+    <span class="confirm-data" id="goods-size">{{ size }}</span>
+    <input type="hidden" name="size" value="{{ size }}"/>
+  </div>
+  {% endif %}
+  <div class="redeem-points-wide-list">
+    <input type="hidden" name="goods_id" value="{{ item.item.id }}">
+    <button class="input-wide" disabled="" id="redeem-form-next">下一步</button>
+  </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block foot_js %} 
+$(function(){
+  var start_captcha_timer = function(btn) {
+    btn.addClass('disabled');
+    btn.prop('disabled', true);
+    var counter = 60;
+    btn.text(counter + 's');
+    var captcha_timer = function(){
+      if(counter > 1) {
+          counter--;
+          btn.text(counter + 's');
+          setTimeout(captcha_timer, 1000);
+      } else {
+          btn.removeClass('disabled');
+          btn.prop('disabled', false);
+          btn.text('获取验证码');
+      }
+    };
+    setTimeout(captcha_timer, 1000)
+  };
+  $('#get-auth-code-button').on('click', function(){
+    var _this = $(this);
+    if(_this.hasClass('disabled')) {
+      return false;
+    }
+    var phone = $.trim($('#phone').val());
+    var phone_error = $('#phone-error');
+    var send_captcha_error = $('#send-captcha-error');
+    phone_error.html("&nbsp;");
+    send_captcha_error.html("&nbsp;");
+    if(!/^1\d{10}$/.test(phone)) {
+      phone_error.text('请重新核对手机号');
+      return false;
+    }
+
+    $('#bind-phone-button').prop('disabled', false);
+    $('#captcha').prop('disabled', false);
+
+    $.post('{{ url_for('store.send_captcha') }}', {
+        'phone' : phone,
+        '_csrf_token': "{{ csrf_token() }}"
+      }, function(res){
+        if(res.success) {
+          OupengBrowser.logEvt("captcha", "ok");
+          send_captcha_error.text('向手机号' + phone + '发送成功');
+          start_captcha_timer(_this);
+        } else {
+          OupengBrowser.logEvt("captcha", "fail");
+          send_captcha_error.text(res.reason);
+        }
+      });
+    return false;
+  });
+
+  $('#bind-phone-button').on('click', function(){
+    var submit_captcha_error = $('#send-captcha-error');
+    var phone = $('#phone').val();
+    if(phone.length <= 0) {
+      submit_captcha_error.text('请提交验证码绑定手机');
+      return false;
+    }
+
+    var captcha = $.trim($('#captcha').val());
+    $.post('{{ url_for('store.bind_phone') }}', {
+      'phone' : phone,
+      '_csrf_token': "{{ csrf_token() }}",
+      'captcha': captcha
+    }, function(res){
+      if(res.success) {
+        OupengBrowser.logEvt("phonebind", "ok");
+        submit_captcha_error.text('手机绑定成功');
+        $('.input-wide').prop('disabled', false);
+        var obj = {};
+        obj.binded_phone = phone;
+        OupengBrowser.updateUserInfoIfNeed(JSON.stringify(obj));
+      } else {
+        OupengBrowser.logEvt("phonebind", "fail");
+        submit_captcha_error.text(res.reason);
+      }
+    });
+    return false;
+  });
+
+  $('#redeem-form-next').on('click', function(){
+    var address = $('#address');
+    var name = $('#name');
+    var data = {};
+    data._csrf_token = "{{ csrf_token() }}";
+    data.goods_id = {{ item.item.id }};
+    data.address = address.val();
+    var submit_captcha_error = $('#send-captcha-error');
+    var phone = $('#phone').val();
+    data.phone = phone;
+    if(phone.length <= 0) {
+      submit_captcha_error.text('请提交验证码绑定手机');
+      return false;
+    }
+    if(name.length === 1) {
+      var name_error = $('#name-error');
+      name_error.html("&nbsp;");
+      data.name = $.trim($('#name').val());
+      if(data.name === '') {
+      name_error.text('请输入收件人姓名');
+      return false;
+      }
+      if(data.name.length > 20) {
+      name_error.text('请核对姓名');
+      return false;
+      }
+    }
+    if(address.length === 1) {
+      var address_error = $('#address-error');
+      address_error.html("&nbsp;");
+      data.address = $.trim(address.val());
+      if(data.address === '' || data.address.length < 2) {
+        address_error.text('请输入收件人地址');
+        return false;
+      }
+      if(data.address.length > 255) {
+        name_error.text('请核对地址');
+        return false;
+      }
+    }
+  });
+})
+{% endblock %}

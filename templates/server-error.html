@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>服务器抽了</title>
+{% endblock %}
+
+{% block main_content %}
+<div class="full-container" id="redeem-fail-container">
+  <img src="/static/img/failure-cat.png" alt="fail">
+  <div class="center-text">
+  <p class="larger">抱歉！</p>
+  {% if result and result.reason %}
+  <p>{{ result.reason }}</p>
+  {% else %}
+  <p>服务器出错了</p>
+  {% endif %}
+  </div>
+</div>
+{% endblock %}

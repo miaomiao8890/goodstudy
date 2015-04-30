@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>商城主页</title>
+{% endblock %}
+
+{% block main_content %}
+<div class="border-bottom" id="mall-home-container">
+  {% if oupenguser %}
+    {% include "profile.html" %}
+  {% else %}
+    {% include "login-header.html" %}
+  {% endif %}
+  <div id="product-list" class="clear-fix border-top">
+    {#
+    {% if today_special %}
+    <div class="hot">
+      <div class="table">
+        <div class="tip inverse ft11">小积分抽大奖</div>
+        <div class="pic"><img src="{{ today_special.thumbnail }}"></div>
+        <div class="txt">
+          <p class="color-gray ft12">{{ today_special.title }}{% if g.act%}（第{{ g.act.stage }}期）{% endif %}</p>
+          <p class="color-light-gray margin-top-05">积分：<span class="through">{{today_special.price}}</span></p>
+          <p class="color-light-orange">
+              <span class="inverse inline-block round-corner small-btn">抢兑仅需</span>
+              {{ today_special.discount_price }}
+          </p>
+          <p class="margin-top-1">
+            {% set detail_link = url_for('store.lottery_detail', item_id=today_special.id) %}
+            {% if today_special.daily_limit <= today_special.sold_count_today or today_special.count <= today_special.sold_count %}
+              <a class="exchange-big-btn disable" href="{{ detail_link }}">今日抽奖已结束</a>
+            {% else %}
+              {% if today_special.start_time > now %}
+              <a class="exchange-big-btn" disabled href="{{ detail_link }}">即将开始</a>
+              {% else %}
+              <a class="exchange-big-btn" href="{{ detail_link }}">立即抽奖</a>
+              {% endif %}
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    #}
+  {% for item in all_goods if item.type != 'lottery' %}
+    {% set cannot_buy = False %}
+    {% if item.status != 1 or item.end_time < now or item.count - item.sold_count <= 0 %}
+        {% set cannot_buy = True %}
+    {% endif %}
+    {% if item.type == 'lottery' %}
+        {% set prod_link = url_for('store.lottery_detail', item_id=item.id) %}
+    {% else %}
+        {% set prod_link = url_for('store.detail', item_id=item.id) %}
+    {% endif %}
+    {% if loop.index is even %}
+    <div class="product-group-right statistics" key="goodsdetail" onClick="location='{{ prod_link }}'">
+    {% else %}
+    <div class="product-list-group">
+      <div class="product-group-left statistics" key="goodsdetail" onClick="location='{{ prod_link }}'">
+    {% endif %}
+    <div class="gift-box">
+      <div class="tip">
+        {% if cannot_buy %}
+        <p>已结束</p>
+        {% elif item.start_time > now %}
+        <p>{{ item.start_time.month }}月{{ item.start_time.day }}日开始</p>
+        {% endif %}
+      </div>
+      <img src="{{ item.thumbnail }}" alt="" class="">
+    </div>
+    <p class="product-title-normal ellipsis">{{ item.title }}</p>
+    {% if item.discount_price %}
+    <p class="product-medal-point-info">
+      <span class="product-medal-info-national color-light-orange ">
+        <span class="inverse round-corner small-btn">活动</span> {{ item.discount_price }}积分
+      </span>
+      <span class="product-points-info-national color-light-gray ">
+        <span class="points-require through">{{ item.price }}</span>
+      </span>
+    </p>
+    {% else %}
+    <p class="product-medal-point-info">
+      <span class="product-points-info">积分<span class="points-require">{{ item.price }}</span></span>
+    </p>
+    {% endif %}
+    {% if loop.index is even %}
+      </div>
+    </div>
+    {% else %}
+    </div>
+    {% endif %}
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block foot_js %}
+{% include 'index.js' %}
+{% endblock %}

@@ -1,0 +1,12 @@
+<html>
+<head>
+<script type="text/javascript">
+if (typeof OupengBrowser != "undefined" && OupengBrowser.passportRequest) {
+  OupengBrowser.requestOpenPage('login.html', 1);
+}
+else {
+  window.location.href = 'oupeng://user/login';
+}
+</script>
+</head>
+</html>

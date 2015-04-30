@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+{% block title %}{% endblock %}
+<link rel="stylesheet" href="/static/css/app.css" />
+<link href="/static/css/nationalDay.css" type="text/css" rel="stylesheet"/>
+{% block css_header %}
+{% endblock css_header %}
+<link href="/static/css/night.css" type="text/css" rel="stylesheet" title="night" disabled/>
+<script src="/static/js/jssdk.js"></script>
+<script type="text/javascript">
+
+function _inject(ob) {
+  OupengBrowser.showToastMessage = function(msg){alert(msg);};
+  OupengBrowser.logEvt = function(key, subkey){};
+  OupengBrowser.requestOpenPage = function(page,i){};
+  OupengBrowser.getUserInfo = function(){};
+  OupengBrowser.updateUserInfoIfNeed = function(jsonobj){};
+  OupengBrowser.isNightModeOn = function(){};
+}
+if (typeof OupengBrowser == "undefined") {
+  var OupengBrowser = new Object();
+  OupengBrowser.available = false;
+  _inject(OupengBrowser);
+} else if (OupengBrowser.passportRequest) {
+  OupengBrowser.available = true;
+} else {
+  OupengBrowser.available = false;
+  _inject(OupengBrowser);
+}
+/**
+ * 夜间模式切换函数
+ * @param bool
+ */
+
+var nightToggle = function (bool) {
+    if (bool) {
+        document.querySelector('link[title=night]').disabled = false;
+    } else {
+        document.querySelector('link[title=night]').disabled = true;
+    }
+}
+    var isNightModeOn = OupengBrowser.isNightModeOn();
+    if (isNightModeOn) {
+        nightToggle(true);
+    } else {
+        nightToggle(false);
+    }
+</script>
+</head>
+<body class="bg-white">
+<div role="main" id="main">
+  {% block main_content %}
+  {% endblock %}
+</div>
+<script type='text/javascript' src='/static/js/jquery-1.11.1.min.js'></script>
+<script type="text/javascript">
+{% block foot_js %}{% endblock %}
+</script>
+</body>
+</html>

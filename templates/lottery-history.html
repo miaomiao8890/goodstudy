@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>兑换历史-详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no, maximum-scale=1" />
+    <link type="text/css" rel="stylesheet" href="/static/css/app.css" />
+    <link type="text/css" rel="stylesheet" href="/static/css/active11.css"/>
+</head>
+<body class="bg-f5">
+<div role="main" id="main">
+    <div class="lottery-his-box">
+        <!--双十一-->
+        <div class="redeem-history-item">
+            <div class="order-detail">
+                <img src="{{ item.image }}" alt="" class="order-product-image">
+                <div class="order-product-info">
+                    <p class="order-product-name">{{ item.title }}（第{{ item.stage }}期）</p>
+                    <p class="order-medal-info">开奖时间：{{ item.awarding_date.year }}年{{ item.awarding_date.month }}月{{ item.awarding_date.day }}日</p>
+                    {% if item.status == '中奖' %}
+                    <p class="order-medal-info">状态：抽奖结束<span class="red">（中奖）</span></p> <!--中奖的状态-->
+                    <p class="order-medal-info">奖品：{{ item.specified }}</p>
+                    {% else %}
+                    <p class="order-medal-info">状态：{{ item.status }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="code-box">
+            <h2 class="table-head">已获得{{ item.voucher_count }}个抽奖号</h2>
+            <table class="code-table" cellspacing=0>
+                {% for voucher in item.vouchers %}
+                <tr>
+                    <td>抽奖号: {% if voucher.status == 1 %}{{ voucher.voucher }}<span class="yellow">(中奖)</span>{% elif voucher.bonus %}{{ voucher.voucher }}<span class="yellow ft08">(+{{ voucher.bonus }}积分)</span>{% else %}{{ voucher.voucher }}{% endif %}
+                    </td>
+                    <td class="right-text">{{ voucher.time.strftime('%m') }}-{{ voucher.time.strftime('%d') }} {{ voucher.time.strftime('%H') }}:{{ voucher.time.strftime('%M') }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="code-box-bottom">
+        </div>
+    </div>
+
+    <!--等待开奖的状态显示按钮begin-->
+    {% if item.status == '等待开奖' %}
+    <div class="bg-f5 margin-top-1 margin-bottom-1">
+        <a href="{{ url_for('store.index') }}" class="lottery-continue-btn">继续参与抽奖</a>
+    </div>
+    {% else %}
+    <div class="bg-f5 margin-top-1 margin-bottom-1">
+        <a href="{{ url_for('store.lottery_win_list', act=item.actid, stage=item.stage) }}" class="lottery-result-btn">查看抽奖结果</a>
+    </div>
+        {% if item.finished %}
+        <div class="bg-f5 margin-top-1 margin-bottom-1">
+            <a class="lottery-continue-btn">已领奖</a>
+        </div>
+        {% elif item.status == '中奖' %}
+        <div class="bg-f5 margin-top-1 margin-bottom-1">
+            <a href="{{ url_for('store.lottery_win_claim', act=item.actid, stage=item.stage ) }}" class="lottery-continue-btn">去领奖</a>
+        </div>
+        {% endif %}
+    {% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>商品信息</title>
+{% endblock %}
+
+{% block main_content %}
+<div class="full-container">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"> <img src="{{ t.item.image }}"> </div>
+        </div>
+    </div>
+    <div class="pagination"></div>
+    {% if not g.act %}
+        {% set start_time = t.item.start_time %}
+    {% endif %}
+    <div class="product-info">
+        <div class="product-title">{{ t.item.title }}{% if g.act%}（第{{ g.act.stage }}期）{% endif %}</div>
+        <div class="product-time-points-info">
+            <div class="clearfix">
+                <div class="product-info-left">
+                    <div class="list-group">
+                        <span class="product-attr-label">开始时间：</span>
+                        <span id="product-start-time">{{ start_time.year}}年{{ start_time.month }}月{{ start_time.day}}日 {{ start_time.strftime('%H') }}:{{ start_time.strftime('%M') }}开始</span>
+                    </div>
+                    {% if t.item.start_time < now %}
+                    <div class="list-group">
+                      <span class="product-attr-label">结束时间：</span>
+                      <span id="product-end-time">
+                      {{ t.item.end_time.year}}年{{ t.item.end_time.month }}月{{ t.item.end_time.day}}日
+                      </span>
+                    </div>
+                    {% else %}
+                      <span class="product-attr-label">抢完为止</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="clearfix lottery-info-table">
+                <div class="lottery-info-left product-attr-label">
+                    <span id="redeemed-amount" class="ft08">{{ t.sold_count_today }}</span>
+                    <span class="inventory-info ft08">人已兑换（库存：{{ t.left }}）</span>
+                </div>
+                <div class="lottery-info-right color-light-orange">
+                    <span class="inverse small-btn round-corner up ft08">抢购仅需</span>
+                    <span id="total-points">{{ t.item.discount_price }}</span>积分
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if not oupenguser %}
+    <div class="lottery-info-table clearfix">
+        <div class="lottery-info-left border-bottom">
+            <span class="color-brown ft08 pd-left05">登录后才可以参加抽奖</span>
+        </div>
+        <div class="lottery-info-right border-bottom">
+            <a id="lottery-draw-login" class="lottery-info-btn">请登录</a>
+        </div>
+    </div>
+    {% elif t.item.daily_limit <= t.sold_count_today %}
+    <!--今日已经结束的状态-->
+    <div class="lottery-info-table clearfix">
+        <div class="lottery-info-left border-bottom"><span class="color-brown ft08 pd-left05">宝贝已走，请默哀~</span></div>
+        <div class="lottery-info-right border-bottom"><a class="lottery-info-btn btn-disable">今日抽奖已结束</a></div>
+    </div>
+    {% elif t.item.count <= t.sold_count or t.item.end_time <= now %}
+    <!--已经结束的状态-->
+    <div class="lottery-info-table clearfix">
+        <div class="lottery-info-left border-bottom"><span class="color-brown ft08 pd-left05">宝贝已走，请默哀~</span></div>
+        <div class="lottery-info-right border-bottom"><a class="lottery-info-btn btn-disable">已结束</a></div>
+    </div>
+    {% elif not chs %}
+    <!--积分不足的状态-->
+    <div class="lottery-info-table clearfix">
+        <div class="lottery-info-left border-bottom">
+            <a class="color-brown ft08 pd-left05" href="{{ url_for('help') }}">如何获得更多积分</a>
+        </div>
+        <div class="lottery-info-right border-bottom">
+            <a class="lottery-info-btn btn-disable">积分不足</a>
+            <p class="margin-top-01 margin-bottom-05 margin-right-1"><a href="{{ share_link }}" class="red">邀请好友再抽奖</a></p>
+        </div>
+    </div>
+    {% elif chs and opportunity == 'invite' %}
+    <!--奖励抽奖-->
+    <div class="lottery-info-table clearfix">
+        <div class="lottery-info-left border-bottom"><span class="color-brown ft08 pd-left05">邀请好友赢取抽奖机会</span></div>
+        <div class="lottery-info-right border-bottom"><a href="{{ draw_link }}" class="lottery-info-btn">奖励抽奖</a></div>
+    </div>
+    {% elif chs and opportunity == 'bonus' %}
+    <!--签到抽奖-->
+    <div class="lottery-info-table clearfix">
+        <div class="lottery-info-left border-bottom"><span class="color-brown ft08 pd-left05">每日登陆都会免费获得1次抽奖机会</span></div>
+        <div class="lottery-info-right border-bottom"><a href="{{ draw_link }}" class="lottery-info-btn">签到抽奖</a></div>
+    </div>
+    {% elif chs and opportunity == 'credit' %}
+    <!--积分抽奖-->
+    <div class="lottery-info-table clearfix">
+        <div class="lottery-info-left border-bottom"><span class="color-brown ft08 pd-left05">使用积分兑换抽奖机会</span></div>
+        <div class="lottery-info-right border-bottom"><a href="{{ draw_link }}" class="lottery-info-btn">积分抽奖</a></div>
+    </div>
+    {% endif %}
+
+    <!--活动规则-->
+    <div class="rule-box">
+        <h2 class="tit"> <img src="/static/img/rule-tit.png"/> 活动规则 <img src="/static/img/rule-tit.png"/></h2>
+        <ul class="list2">
+            <li>
+                &nbsp;&nbsp;&nbsp;&nbsp;欧朋浏览器10的用户在2014年12月8日-24日之间可以登陆个人积分中心参与活动。
+            </li>
+            <li>
+                &nbsp;&nbsp;&nbsp;&nbsp;所有用户每日登陆活动页面即可获得一次免费抽奖机会（每日限一次），邀请好友安装使用欧朋浏览器获得更多抽奖机会（判断邀请好友成功的条件是好友必须打开浏览器使用，删除后重新下载不算邀请成功哦～）。没有邀请好友的用户可以用积分兑换抽奖次数，每消耗30积分可以获得一次抽奖机会。
+            </li>
+            <li>
+                <span class="red">签到抽奖</span>：每日登陆即可获得一次免费抽奖机会；
+            </li>
+            <li>
+                <span class="red">积分抽奖</span>：用个人积分中的积分兑换抽奖机会，30积分=1次抽奖机会；
+            </li>
+            <li>
+                <span class="red">奖励抽奖</span>：邀请好友安装欧朋浏览器获得抽奖机会；
+            </li>
+        </ul>
+        <h2 class="tit"> <img src="/static/img/rule-tit.png"/> 活动奖励 <img src="/static/img/rule-tit.png"/></h2>
+        <ol class="list1">
+            <li><span>1</span> 12月8日-10日，奖品为移动硬盘、iPod shuffle、山地自行车、欧朋抱枕、欧朋定制U盘、海盗玩偶以及5元话费；</li>
+            <li><span>2</span> 12月15日-17日，奖品为空气加湿器、美拍神器、优衣库羽绒服、欧朋背袋、流量宝雨伞、欧朋充电宝、5元话费；</li>
+            <li><span>3</span> 12月22日-24日，奖品为乐视TV、索尼微单、联想笔记本电脑、欧朋T恤、智能手环、欧朋U盘，5元话费；</li>
+        </ol>
+        <h2 class="tit"> <img src="/static/img/rule-tit.png"/> 活动说明 <img src="/static/img/rule-tit.png"/></h2>
+        <ul class="list2">
+            <li>• 参与活动前，请详细阅读活动规则及相关条款。凡参与本次活动，则视为同意活动规则及免责声明条款。</li>
+            <li>• 严厉禁止和打击恶意刷奖行为。对于恶意刷奖，主办方有权取消获奖者获奖资格，并保留相关法律权利。</li>
+            <li>• 对于任何通过不正当手段参与活动者，活动主办方有权在不事先通知的情况下取消其参加活动及得奖资格。</li>
+            <li>• 主办方不对因网络传输原因而导致参加者提交的信息错误承担任何责任。</li>
+            <li>• 所有获得实物奖品的用户，要准确填写真实姓名、联系方式以及收件地址，主办方会在三个工作日内与获奖者电话核实信息及领奖方式。</li>
+            <li>• 当期活动结束后，实物奖品的递送将会在活动结束后的十个工作日内进行。由此产生的个人所得税，根据国家规定，由获奖者自行承担。</li>
+            <li>• 活动反馈：如果您在抽奖过程中遇到问题，可在欧朋浏览器贴吧提问，会有专门工作人员进行解答。</li>
+            <li>• 本次活动最终解释权归欧朋浏览器所有。</li>
+        </ul>
+    </div>
+
+</div>
+{% endblock %}
+
+{% if not oupenguser %}
+{% block foot_js %}
+$(function() {
+  $("#lottery-draw-login").on("click", function (e) {
+    if (OupengBrowser.available) {
+      OupengBrowser.requestOpenPage('login.html', 1);
+    } else {
+      window.location.href = 'oupeng://user/login';
+    }
+  });
+});
+{% endblock %}
+{% endif %}

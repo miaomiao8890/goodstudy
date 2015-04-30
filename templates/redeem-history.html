@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>兑换历史</title>
+{% endblock %}
+
+{% block css_header %}
+<link rel="stylesheet" href="/static/css/rh.css" />
+{% endblock %}
+
+
+{% block main_content %}
+<div class="full-container" id="redeem-history-container">
+{% if not items %}
+  <div class="history-null-wrap">
+    <img src="/static/img/history-clock.png">
+    <p class="des">暂无兑换记录</p>
+    <a href="#" class="redeem-btn back-to-store-index">继续逛逛商城吧 ></a>
+  </div>
+{% else %}
+  {% for item in items %}
+    {% if item.type == 'lottery' %}
+    {#
+    <!--双十一-->
+    <div class="redeem-history-item">
+        <div class="order-detail">
+            <div class="Position">
+                <img src="{{ item.image }}" alt="" class="order-product-image">
+                <div class="ischange">
+                {% if item.status == '未中奖' %}
+                <span class="lottery-sorry">{{ item.status }}</span>
+                {% elif item.status == '中奖' %}
+                <span class="lottery-con">{{ item.status }}</span>
+                {% elif item.status == '等待开奖' %}
+                <span class="lottery-wait">{{ item.status }}</span>
+                {% endif %}
+                </div>
+            </div>
+            <div class="order-product-info">
+                <p class="order-product-name">{{ item.title }}（第{{ item.stage }}期）</p>
+                <a href="{{ url_for('store.lottery_draw_history', act=item.actid, stage=item.stage) }}" class="order-medal-info lottery-icon">{{ item.count }}个抽奖订单</a>
+                <p class="order-medal-info">兑换时间：{{ item.time.year }}年{{ item.time.month }}月{{ item.time.day }}日</p>
+            </div>
+        </div>
+    </div>
+    #}
+    {% else %}
+    <div class="redeem-history-item">
+        <div class="order-detail">
+            <div class="Position">
+                <img src="{{ item.image }}" alt="" class="order-product-image">
+                <div class="ischange">
+                {% if item.status == 1 %}
+                  已完成
+                {% else %}
+                  审核中
+                {% endif %}
+                </div>
+            </div>
+            <div class="order-product-info">
+                <p class="order-product-name">{{ item.title }}</p>
+                {% if item.type == 'qqcoin' %}
+                <p class="order-medal-info">充值qq号：{{ item.qq }}</p>
+                {% elif item.type == 'card' %}
+                <p class="order-medal-info">会员卡密：{{ item.vourcher }}</p>
+                {% endif %}
+                <em class="order-points-info">积分&nbsp{{ item.price }}
+                {% if item.type == 'card' and item.act_url %}
+                <a href="{{ item.act_url }}" class="color-blue fright">立即激活</a>
+                {% endif %}
+                </em>
+                <p class="order-medal-info">兑换时间：{{ item.time.year }}年{{ item.time.month }}月{{ item.time.day }}日</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block foot_js %}{% include 'js.js' %}{% endblock %}

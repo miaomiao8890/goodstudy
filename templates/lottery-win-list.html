@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>兑换历史-详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no, maximum-scale=1" />
+    <link type="text/css" rel="stylesheet" href="/static/css/app.css" />
+    <link type="text/css" rel="stylesheet" href="/static/css/active11.css"/>
+</head>
+<body class="bg-f5">
+<div role="main" id="main">
+    <div class="redeem-history-item margin-bottom0">
+        <div class="order-detail">
+            <img src="{{ item.image }}" alt="" class="order-product-image">
+            <div class="order-product-info">
+                <p class="order-product-name">{{ item.title }}（第{{ item.stage }}期）</p>
+                <p class="margin-top-05">中奖用户名单</p>
+                <p class="order-medal-info">开奖时间：{{ item.awarding_date }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="name-list-box border-bottom">
+        <h2>共{{ item.win_count }}用户中奖</h2>
+        <ul>
+            {% for win in item.wins %}
+            <li><span>用户名：{{ win.name }}</span><span>抽奖号：{{ win.voucher }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+</body>
+</html>

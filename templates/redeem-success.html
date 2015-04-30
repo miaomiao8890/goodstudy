@@ -1,0 +1,27 @@
+{% extends "night-base.html" %}
+
+{% block title %}
+<title>兑换成功</title>
+{% endblock %}
+
+{% block main_content %}
+  <div class="full-container" id="redeem-success-container">
+  <img src="/static/img/success-cat.png" alt="success">
+  <div class="center-text">
+    <p class="larger">兑换成功！</p>
+  </div>
+  {% if goods_detail and goods_detail.type == 'card' %}
+  <div class="invented">
+    {{ goods_detail.title }}: <br>
+    {{ result.order.vourcher }}
+  </div>
+  {% endif %}
+  <button type="button" class="larger back-to-index">返回个人中心</button>
+  </div>
+{% endblock %}
+
+
+{% block foot_js %}
+OupengBrowser.logEvt("goodsredeem", "ok");
+{% include 'js.js' %}
+{% endblock %}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>流量兑换</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no,maximum-scale=1" />
+    <link href="/static/css/app.css" type="text/css" rel="stylesheet"/>
+    <link href="/static/css/redpacket.css" type="text/css" rel="stylesheet"/>
+</head>
+<body class="red-bg">
+    <div class="red-title">
+        <img style="width:100%" src="/static/img/red/head.png"/>
+        <div id="red-flow" style=""><span id="flow-amount">{{ amount }}</span>M</div>
+    </div>
+    <div class="main padding-top-0">
+    	<form name="getAuthCode" method="" id="get-auth-code-form" action="">
+            <div class="red-phonetype margin-top-1">
+                <h4 class="title left">手机号码</h4>
+                <span class="right" id="isp"></span>
+            </div>
+    	    <div class="bg-white red-phonenum">
+                <input type="tel" class="left input_wide" name="phone-number" id="phone-number" placeholder="11位有效手机号" value="{{ phone }}"/>
+            </div>
+    	</form>
+    </div>
+
+    <!-- class="red-nocheck"为灰色状态
+         class="red-checked"为选中状态 
+	-->
+    <div class="main padding-top-0 padding-bottom-0 display-none" id="flow-options">
+        <h4 class="title clearfix"><p class="right display-none" id="warning-notenough"><img class="red-warning" src="/static/img/warning.png"><span id="warning-notenough-text">中国联通60M才能领取</span></p><span>可提取额度</span>
+        </h4>
+    	<ul class="red-check" id="cards">
+        </ul>
+    	<button id="red-getflow" class="btn-abled" >立即领取</button>
+    	<p class="remark">本服务由运营商支持，提取后，请向所属运营商查询充值状态。
+        <a href="{{ config['READPACKET_HELP'] }}" class="right">帮助&nbsp&gt</a>
+        </p>
+    </div>
+    <!-- 未填写手机号 -->
+    <!-- <div class="main margin-top-1 red-no">
+    	<h4 class="warning">您尚未填写手机号,流量包无法显示！</h4>
+    </div> -->
+    <!-- 无效运营商 -->
+    <div class="main margin-top-1 red-no display-none" id="warning-msg">
+    	<h4 class="warning" id="warning-text">暂不支持该运营商！</h4>
+    </div>
+    <div id="tc"></div>
+    <div id="alertBox">
+        <div class="bg-white">
+            <img id="req-pic" src="/static/img/red/done.png">
+            <p id="req-msg">提取请求已收到，请稍后查询</p>
+        </div>
+        <a href="javascript:void();" class="input-sub" id="input-sub">
+            <div class="change">
+                确&nbsp定
+            </div>
+        </a>
+    </div>
+</div>
+<!--<script src="/static/js/jquery-1.11.1.min.js"></script>-->
+<script src="/static/js/zepto.min.js"></script>
+<script src="/static/js/touch.js"></script>
+<script type="text/javascript">
+$(function(){
+    // 红包分享
+    $("#red-img").click(function(){
+        {% set redp = config['REDPACKET_SHARE'] %}
+        OupengBrowser.socialShare("{{ redp['title'] }}", "{{ redp['desc'] }}", "{{ redp['imgurl'] }}", "{{ redp['link'] }}");
+        OupengBrowser.logEvt("USERCENTER_SHARE_CLICKED",""); // 分享统计
+    });
+
+    var h = $(window).height();
+    var oInput = document.getElementById('phone-number');
+    $("#red-getflow").click(function(){
+        //选中的流量
+        var card_flow = $('.red-checked').attr('flowVal');
+        //流量卡id
+        var card_id = $('.red-checked').attr('cardId');
+        $(this).prop("disabled", true);
+        $(this).addClass("btn-disable");
+        $(this).text("领取中...");
+        $.ajax({
+            url: "{{ url_for('flow.exchange') }}",
+            type: "POST",
+            data: {
+                "_csrf_token": "{{ csrf_token() }}",
+                "phone_frm": "{{ phone_frm }}",
+                "phone_to": oInput.value,
+                "card_id": card_id,
+                "flow": card_flow,
+            },
+            dataType: "json",
+            success: function(data){
+                if(data.success){
+                    $("#req-pic").attr("src", "/static/img/red/done.png");
+                    $("#req-msg").text("提取请求已收到，请稍后查询");
+                }else{
+                    $("#req-pic").attr("src", "/static/img/red/error.png");
+                    $("#req-msg").text(data.reason);
+                }
+                $("#phone-number").attr("disabled", "disabled");
+                $("#tc").css("height",h);
+                $("#tc").show();
+                $("#alertBox").show();
+            },
+        });
+    });
+    $("#input-sub").click(function(){
+        var phone = oInput.value;
+        window.location.replace("{{ url_for('flow.index') }}?phone=" + phone);
+    });
+    oInput.addEventListener('input',function(){
+        if(this.value.length==11){
+            show_cards(this.value);
+        }
+    },false);
+    show_cards("{{ phone }}");
+});
+function show_cards(phone){
+    $("#warning-notenough").addClass("display-none");
+    $.ajax({
+        url: "{{ url_for('flow.cards') }}",
+        type: "GET",
+        data: {phone: phone},
+        dataType: "json",
+        success: function(data){
+            if(data.success){
+                var amount = $("#flow-amount").text();
+                $("#isp").text(data.isp);
+                $("#cards").empty();
+                var is_checked = false;
+                if(data.cards.length == 0){
+                    $("#isp").text(data.isp);
+                    $("#warning-text").text("暂不支持该运营商！");
+                    display("warning");
+                }else{
+                    for(idx in data.cards){
+                        var card = data.cards[idx];
+                        if(card.flow == 0){continue;}
+                        card_html = make_flowcard_html(card, amount, idx);
+                        $("#cards").append(card_html);
+                        if(idx == 0 && amount >= card.flow){
+                            is_checked = true;
+                        }
+                    }
+                    // 设置提取按钮
+                    enable_submit_btn(is_checked);
+                    if(!is_checked){
+                        // 设置流量不够兑换提示
+                        $("#warning-notenough-text").text(data.isp + data.cards[0].flow + "M才能领取");
+                        $("#warning-notenough").removeClass("display-none");
+                    }
+                    display("cards");
+                }
+            }else{
+                $("#isp").text(data.isp);
+                $("#warning-text").text(data.reason);
+                display("warning");
+            }
+        },
+    });
+}
+function make_flowcard_html(card, amount, idx){
+    if(amount >= card.flow){
+        liclass = "red-avail";
+    }else{
+        liclass = "red-unavail";
+    }
+    if(idx == 0 && amount >= card.flow){
+        liclass += " red-checked";
+        spanclass = "checked-img";
+        is_checked = true;
+    }else{
+        spanclass = "";
+    }
+    s = '<li class="'+liclass+'" cardId="'+card.code+'" flowVal="'+card.flow+'"><span class="'+spanclass+'"></span><label>'+card.flow+'M</label></li>'
+    return s
+}
+function enable_submit_btn(is_enable){
+    if(is_enable){
+        // 提交按钮可用
+        $("#red-getflow").prop("disabled", false);
+        $("#red-getflow").removeClass("btn-disable");
+    }else{
+        // 设置为不可用
+        $("#red-getflow").prop("disabled", true);
+        $("#red-getflow").addClass("btn-disable");
+    }
+}
+function display(item){
+    var dis_none_cls = "display-none";
+    if(item == 'cards'){
+        $("#flow-options").removeClass(dis_none_cls);
+        $("#warning-msg").addClass(dis_none_cls);
+        reg_flow_click();
+    }else if(item == 'warning'){
+        $("#warning-msg").removeClass(dis_none_cls);
+        $("#flow-options").addClass(dis_none_cls);
+    }else{
+        // all display none
+        $("#flow-options").addClass(dis_none_cls);
+        $("#warning-msg").addClass(dis_none_cls);
+    }
+}
+function reg_flow_click(){
+    $(".red-avail").click(function(){
+            $("li").removeClass("red-checked");
+    	    $(".red-check span").removeClass("checked-img");
+    	    $(this).addClass("red-checked");
+    	    $(this).children("span").addClass("checked-img");
+    });
+}
+</script>
+</body>
+</html>

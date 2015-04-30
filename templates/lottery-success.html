@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>兑换成功</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no, maximum-scale=1" />
+    <link type="text/css" rel="stylesheet" href="/static/css/app.css" />
+    <link type="text/css" rel="stylesheet" href="/static/css/nationalDay.css"  />
+    <link type="text/css" rel="stylesheet" href="/static/css/active11.css"  />
+</head>
+<body class="bg-white">
+<div role="main" id="main">
+    <div class="full-container" id="redeem-success-container">
+        <img src="/static/img/success-cat.png" alt="success">
+        <div class="center-text">
+            <p class="lottery-success">恭喜您！已成功参加抽奖</p>
+        </div>
+        <div class="lottery-info">
+            <p>商品名称：{{ detail.item.title }}(第{{ result.lottery.stage }}期)</p>
+            <p>抽奖号码：{{ result.lottery.voucher }}</p>
+            {% if result.lottery.bonus %}
+            <p>意外获得<span class="color-light-orange">{{ result.lottery.bonus }}积分</span>奖励</p>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('store.lottery_draw_history', act=result.lottery.actid, stage=result.lottery.stage ) }}" class="lottery-success-btn">查看抽奖单</a>
+    </div>
+</div>
+</body>
+</html>

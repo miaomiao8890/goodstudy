@@ -1,0 +1,24 @@
+<div class="bg-white main">
+  <div class="clearfix">
+    <div class="head" id="avatar">
+      <a>
+        {% if g.user.avatar_url %}
+        <img src="{{ g.user.avatar_url }}" alt="Avatar"/>
+        {% else %}
+        <img src="/static/img/james.jpg" alt="Avatar"/>
+        {% endif %}
+      </a>
+      <div class="mask"></div>
+    </div>
+    <div class="head-l-txt">
+      <p class="color-black ft12" id="name">{{ nickname }}</p>
+      <p class="credit">
+        <a href="{{ url_for('help') }}" class="credit statistics" key="getscore"> 积分：<span id="user-balance">...</span></a>
+      </p>
+      <p class="credit">
+        <a href="{{ url_for('store.redeem_history') }}" class="ft09 statistics" key="exchg.history"><img id="clock" src="/static/img/redeem-history.png">兑换历史</a>
+      </p>
+    </div>
+  </div>
+  <!--<div class="medal margin-top-05" id="medals"></div>-->
+</div>

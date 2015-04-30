@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>商品信息</title>
+{% endblock %}
+
+{% block main_content %}
+<div class="full-container">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <img src="{{ item.item.image }}" alt="">
+      </div>
+    </div>
+  </div>
+  <!-- <div class="pagination"></div> -->
+  <div class="product-info">
+    <div class="product-title">{{ item.item.title }}</div>
+    <div class="product-time-points-info">
+      <div class="product-info-left">
+          <div class="list-group">
+          <span class="product-attr-label">开始时间：</span>
+          <span id="product-start-time">
+          {{ item.item.start_time.year}}年{{ item.item.start_time.month }}月{{ item.item.start_time.day}}日 {{ item.item.start_time.strftime('%H') }}:{{ item.item.start_time.strftime('%M') }}开始
+          </span>
+          </div>
+          {% if item.item.start_time < now %}
+          <div class="list-group">
+            <span class="product-attr-label">结束时间：</span>
+            <span id="product-end-time">
+            {{ item.item.end_time.year}}年{{ item.item.end_time.month }}月{{ item.item.end_time.day}}日
+            </span>
+          </div>
+          {% else %}
+            <span class="product-attr-label">抢完为止</span>
+          {% endif %}
+      </div>
+      {% if item.item.discount_price %}
+      <div class="product-info-right color-light-orange">
+        <span class="inverse small-btn round-corner up ft08">抢购仅需</span>
+        <span id="total-points">{{ item.item.discount_price }}</span>积分
+      </div>
+      {% else %}
+      <div class="product-info-right">
+        <span id="total-points">{{ item.item.price }}</span>积分
+      </div>
+      {% endif %}
+    </div>
+    <p class='product-detail'>{{ item.item.description }}</p>
+    </div>
+  </div>
+  <div class="redeem-info">
+    <div class="redeemed-amount-inventory">
+      <span id="redeemed-amount">{{ item.sold_count }}</span>人已兑换
+      {% if not item.has_size %}
+        <span class="inventory-info">（库存：<span id="product-inventory">{{ item.left }}</span>）</span>
+      {% endif %}
+    </div>
+    {% if item.buy_filter %}
+      {% if item.buy_filter == '请登录' %}
+      <button id="redeem-button">{{ item.buy_filter }}</button>
+      {% else %}
+      <button id="redeem-button" disabled="" class="disable">{{ item.buy_filter }}</button>
+      {% endif %}
+    {% else %}
+    <button id="redeem-button">马上兑换</button>
+    {% endif %}
+  </div>
+  </div>
+</div>
+{% if item.has_size %}
+  <div id="redeem-panel">
+  <div class="bottom-panel-inner">
+    <div class="redeem-panel-title">
+    <div class="redeem-panel-text">选择尺码</div>
+    </div>
+    <div id="redeem-panel-size-list">
+    <ul>
+      {% for left in item.left %}
+      {% if item.left[left] == 0 %}
+      <li class="inventory-zero">
+      {% else %}
+      <li>
+      {% endif %}
+      <span class="redeem-panel-size">{{ left }}</span><span class="redeem-panel-inventory">库存{{ item.left[left] }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    </div>
+    <div class="redeem-button-section"><button id="redeem-panel-button" class="redeem-button-inactive">兑换</button></div>
+  </div>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block foot_js %}
+{% if not item.buy_filter %}
+$(function() {
+  $("#redeem-button").on("click", function (e) {
+  e.stopPropagation();
+  {% if item.has_size %}
+    $("#main").addClass("main-mask");
+    $("#redeem-panel").css({top: "50%"});
+    $("body").css({overflow: "hidden", background: "#000000"})
+  {% else %}
+    window.open("{{ url_for('store.confirm', item_id=item.item.id) }}", '_self');
+  {% endif %}
+  });
+
+  $('#redeem-panel-button').on("click", function(e) {
+  e.stopPropagation();
+  var size = $('#redeem-panel-size-list li.size-selected span.redeem-panel-size').text();
+  window.open("{{ url_for('store.confirm', item_id=item.item.id) }}?size=" + size, '_self');
+  });
+});
+{% elif item.buy_filter == '请登录' %}
+$(function() {
+  $("#redeem-button").on("click", function (e) {
+    if (OupengBrowser.available) {
+      OupengBrowser.requestOpenPage('login.html', 1);
+    } else {
+      window.location.href = 'oupeng://user/login';
+    }
+  });
+});
+{% endif %}
+{% include 'js.js' %}
+{% endblock %}
