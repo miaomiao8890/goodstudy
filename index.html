@@ -1,212 +1,177 @@
-{% extends "base.html" %}
-{% block title %}
-<title>个人中心</title>
-{% endblock %}
-
-{% block main_content %}
-<div class="bg-white">
-  {% include "profile.html" %}
-
-  <div class="btn-box clearfix">
-    <div class="sign-btn{% if signable %} signable-btn{% endif %}" id="div_sign_btn">
-      <a href="#" id="sign_btn" class="statistics" key="uc.signin">
-        {% if signable %}
-        <img id="sign-icon" src="/static/img/sign-icon.png"/>
-        <div>
-          <p class="ft1" id="sign-desc">签到获{{ credits }}积分</p>
-        </div>
-        {% else %}
-        <img id="sign-icon" src="/static/img/sign-icon.png" style="display:none" />
-        <div>
-          <p class="ft1" id="sign-desc">已签到{{days}}天
-          <span>明日可领取{{ credits }}积分</span></p>
-        </div>
-        {% endif %}
-      </a>
-    </div>
-  </div>
-</div> <!-- div.bg-white end -->
-<!--red packet-->
-{% if config['REDPACKET_OPEN'] == 'on' or (config['REDPACKET_OPEN'] == 'off' and phone in config['REDPACKET_WHITELIST']) %}
-<div class="main border-top">
-    {% if phone %}
-    <a href="{{ url_for('flow.index', phone=phone) }}">
-    {% else %}
-    <a href="#" id="red-phone">
-    {% endif %}
-
-    <div class="table exchange-red-text">
-        <ul class="exchange-gift left">
-            <li><img id="red-icon" src="/static/img/red/red-packet.png" alt="兑换奖品"/></li>
-            <li><span>流量红包</span></li>
-        </ul>
-        {% if phone %}
-        <ul class="exchange-flow right" id="exchange-flow">
-            <li class="red-text">待提取</li>
-            <li class="red-flow"><span id="flo-amount">{{ flow_amount }}</span>M</li>
-            <li><img class="red-next" src="/static/img/red/next.png" alt="兑换奖品"/></li>
-        </ul>
-        {% else %}
-        <ul class="exchange-flow right">
-            <li class="red-text">绑定手机号领取</li>
-            <li class="red-flow" style="display:none;"><span id="flo-amount">0</span>M</li>
-            <li><img class="red-next" src="/static/img/red/next.png" alt="兑换奖品"/></li>
-        </ul>
-        {% endif %}
-    </div>
-    </a>
+<div class="banner">
+    {if="$isOneA==1"}
+    <img class="bg_color" src="/static/img/pic1jia.png" alt="100M流量红包免费发 流量福利大放送">
+    {else}
+    <img class="bg_color" src="/static/img/pic2.png" alt="100M流量红包免费发 流量福利大放送">
+    {/if}
 </div>
-{% endif %}
-<!--red packet end-->
-{#
-{% if g.act %}
-<!--11.11 begin-->
-<div class="main double11-scroll margin-top-1 border-top">
-    <ul class="marquee-list" id="marquee_list">
-    </ul>
+<div class="btn-box bg_color p_bottom_2">
+    <a id="share_btn">免费发红包</a>
+    <p class="color-dark-red t-center">免费发红包，自己也可以抢哦！</p>
 </div>
-<div class="main border-bottom bg-double11">
-    <div class="table">
-        <div class="exchange-gift"><img src="{{ g.act.img }}" alt="红米1"/></div>
-        <div class="exchange-txt">
-            <p class="color-white font-bold">
-                <span class="ft1">9款大奖 9种逼格</span>
-                <!--<span class="ft13">30积分参与抽奖</span>-->
-            </p>
-            <p class="ft09 color-white">30积分参与抽奖</p>
-            <p class="margin-top-1"><a href="{{ url_for('store.lottery_detail', item_id=g.act.goods_id) }}" class="btn-lottery">抽 奖</a></p>
-        </div>
-    </div>
+<div class="btn-box t-center bg_color pb15">
+    <a href="rule.html" id="rules" class="color-dark-red ">活动规则</a>
 </div>
-<!--11.11 end-->
-{% endif %}
-#}
-<div class="main border-top">
-    <h3>历史累计节省 <span id="flow">{{ flow }}MB</span></h3>
-    <div class="table margin-top-1">
-        <div class="exchange-gift">
-            <img src="/static/img/flow.png">
-        </div>
-        <div class="exchange-txt">
-            <ul id="list">
-                <li id="li1"><img src="/static/img/li1.png" class="disc">多聊 <span>{{ (flow*config['FLOW_1M_CAN']['weixin'])|int }}</span> 小时微信</li>
-                <li id="li2"><img src="/static/img/li2.png" class="disc">多听 <span>{{ (flow*config['FLOW_1M_CAN']['song'])|int }}</span> 首歌</li>
-                <li id="li3"><img src="/static/img/li3.png" class="disc">多看 <span>{{ (flow*config['FLOW_1M_CAN']['ebook'])|int }}</span> 部书</li>
-            </ul>
-        </div>
-    </div>
+<div>
+    <img class="border_wave" src="/static/img/wave.png">
 </div>
-<div class="main border-top">
-  <div class="table">
-    <div class="exchange-gift"><img src="/static/img/gift.png" alt="兑换奖品"/></div>
-    <div class="exchange-txt">
-      <p class="ft13 color-black">攒积分抢小海盗</p>
-      <p class="ft09 color-light-gray">积分专属限量200个</p>
-      <p class="margin-top-1"><a href="{{ url_for('store.index') }}" class="statistics" key="homeofmall"><img src="/static/img/exchange.png" /></a></p>
-    </div>
-  </div> <!-- table end -->
+<h2>流量合作伙伴</h2>
+<div class="new-logos clearfix">
+    <img src="/static/img/logo9.png"/><img src="/static/img/logo10.png"/>
 </div>
+<!-- <div class="logos clearfix">
+    <img src="/static/img/logo5.png"/><img src="/static/img/logo6.png"/><img src="/static/img/logo7.png"/><img src="/static/img/logo8.png"/>
+</div> -->
+<div class="code-box" style="margin:2em auto 3em;white-space:normal;clear:both;">
+    <img class="QRCode2" src="/static/img/code2.png" alt="二维码">
+</div>
+<p class="code-tip">长按指纹识别二维码，关注欧朋流量宝</p>
+<div class="cover" id="cover" style="display: none;"></div>
+<div class="share-guide" id="guide" style="display: none;">
+    <img src="/static/img/share-guid.png" alt="点击右上角... 然后点击分享"/>
+</div>
+<div id="toast" class="none">
+    发送成功
+</div>
+{if condition="$status==1"}
+<script>
 
-<div id="cover"></div>
-<div class="credit-float" style="display: none;">
-  <span class="ft3" id='credit-got-by-sign'></span>积分
-</div>
-{% endblock %}
-
-{% block foot_js %}
-{% include 'index.js' %}
-//==========11.11滚动动画 begin=============
-function roll_lottery_status() {
-    var  marquee = document.getElementById("marquee_list"),
-         items = marquee.querySelectorAll("li"),
-         itemLength = items.length,
-         current = 0;
-         marquee.innerHTML += marquee.innerHTML;
-
-    function animation(){
-         marquee.style.cssText="-webkit-transform:translate3d(0,-"+2.5*(++current)+"em,0);-webkit-transition:500ms ease 0s;";
-    }
-    marquee.addEventListener("webkitTransitionEnd",function(){
-        if(current >= itemLength){
-            current = 0;
-            marquee.style.cssText="-webkit-transform:translate3d(0,0,0);"
+    window.onload = function () {
+        var btn = document.getElementById("share_btn"),
+                cover = document.getElementById("cover"),
+                guide = document.getElementById("guide"),
+                toast = document.getElementById("toast"),
+                redirect_url = "";
+        //点击发红包按钮
+        btn.addEventListener("click", packHandler, false);
+        //关闭浮层
+        cover.addEventListener("touchend", function (e) {
+            e.preventDefault();
+            cover.style.cssText = "display:none";
+            guide.style.cssText = "display:none";
+        }, false);
+        //阻止cover浮层上的滑动
+        cover.addEventListener("touchmove", function (e) {
+            e.preventDefault();
+        }, false);
+        function closeGuide(){
+            cover.style.cssText = "display:none";//关闭分享引导层
+            guide.style.cssText = "display:none";//关闭分享引导层
         }
-    },false);
-    var myTimer = setInterval(function(){animation()},2000);
-}
-
-(function(){
-    if (!String.prototype.format) {
-      String.prototype.format = function() {
-          var args;
-          args = arguments;
-          if (args.length === 1 && args[0] !== null && typeof args[0] === 'object') {
-              args = args[0];
-          }
-          return this.replace(/{([^}]*)}/g, function(match, key) {
-              return (typeof args[key] !== "undefined" ? args[key] : match);
-          });
-      }
-    };
-    $.get('{{ url_for('apis.latest_lottery') }}', function(data) {
-        if (!data.ok) {
-            html = '<li><img src="/static/img/head.jpg">Emily获得一个抽奖号 <span>刚刚</span></li>';
-        } else {
-            html = '';
-            pattern = '<li><img src="{avatar}">{name}获得一个抽奖号 <span>{status}</span></li>';
-            for(var i=0; i<data.data.length; i++) {
-                html += pattern.format(data.data[i]);
+        function packHandler() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                        var responseObj = JSON.parse(xhr.responseText);
+                        var code = responseObj.code;
+                        if (code == 200) {//成功，可以发红包
+                            // alert(responseObj.redirect_url);
+                            redirect_url = responseObj.redirect_url;
+                            var bodyHeight = window.innerHeight+document.body.scrollTop;
+                            cover.style.cssText="display:block;height:"+bodyHeight+"px";//打开分享引导层
+                            guide.style.cssText = "display:block";//打开分享引导层
+                            //设置分享自定义事件
+                            wx.ready(function () {
+                                /*发送给朋友*/
+                                wx.onMenuShareAppMessage({
+                                    title: '我发了流量红包，快来抢啊！', // 分享标题
+                                    desc: '这是{$nickName}通过欧朋流量宝发的100M流量红包，点击直接抢！', // 分享描述
+                                    link: redirect_url, // 分享链接
+                                    imgUrl: '{$host}/images/share-pic.png', // 分享图标
+                                    success: function () {
+                                        closeGuide();
+                                    },
+                                    cancel: function () {
+                                        closeGuide();
+                                    }
+                                });
+                                /*分享到朋友圈*/
+                                wx.onMenuShareTimeline({
+                                    title: '{$nickName}发了100M流量红包，快来抢啊！', // 分享标题
+                                    imgUrl: '{$host}/images/share-pic.png', // 分享图标
+                                    link: redirect_url, // 分享链接
+                                    success: function () {
+                                        closeGuide();
+                                    },
+                                    cancel: function () {
+                                        closeGuide();
+                                    }
+                                });
+                            });
+                        } else {//种种原因，不能发红包
+                            alert(responseObj.message);
+                            redirect_url = responseObj.redirect_url;
+                            location.href=redirect_url;
+                            return;
+                        }
+                    }
+                }
             }
+            xhr.open("get", "/getSysPacket", false);
+            xhr.send(null);
         }
-        $('#marquee_list').html(html);
-        roll_lottery_status();
-    });
-    //获取用户信息
-    $.get('/api/user/all', function(data) {
-      //alert(data);
-      //积分
-      $('#user-balance').text(parseInt(data.balance, 10));
-      //签到按钮
-      if(data.signable){
-        if(!$('#div_sign_btn').hasClass('signable-btn')){
-          $('#div_sign_btn').addClass('signable-btn');
-          $('#sign-icon').show();
-          $('#sign-desc').html('签到获' + data.credits + '积分');
+    };
+</script>
+{else}
+<script>
+    window.onload = function () {
+        var btn = document.getElementById("share_btn"),
+                cover = document.getElementById("cover"),
+                guide = document.getElementById("guide"),
+                toast = document.getElementById("toast"),
+                imgSrc = document.getElementById("wx_pic").src,
+                redirect_url = "";
+        //点击发红包按钮
+        btn.addEventListener("click", openGuide, false);
+        //关闭浮层
+        cover.addEventListener("touchend", function (e) {
+            e.preventDefault();
+            cover.style.cssText = "display:none";
+            guide.style.cssText = "display:none";
+        }, false);
+        //阻止cover浮层上的滑动
+        cover.addEventListener("touchmove", function (e) {
+            e.preventDefault();
+        }, false);
+        function openGuide() {
+            var bodyHeight = window.innerHeight+document.body.scrollTop;
+            cover.style.cssText="display:block;height:"+bodyHeight+"px";//打开分享引导层
+            guide.style.cssText = "display:block";//打开分享引导层
         }
-      }else{
-        if($('#div_sign_btn').hasClass('signable-btn')){
-          $('#div_sign_btn').removeClass('signable-btn');
-          $('#sign-icon').hide();
-          $('#sign-desc').html('已签到' + data.days + '天<span>明日可领取' + data.credits + '积分</span>');
+        function closeGuide(){
+            cover.style.cssText = "display:none";//关闭分享引导层
+            guide.style.cssText = "display:none";//关闭分享引导层
         }
-      }
-      //绑定手机号
-      if(data.phone){
-        $('.red-textna').text('待提取');
-        $('#flo-amount').text(data.flo_amount);
-        $('.red-flow').show();
-      }else{
-        $('.red-textna').text('绑定手机号领取');
-        $('.red-flow').hide();
-      }
-      //节省流量
-      var sumSavingTraffic = data.flow,
-          PendingSavingTraffic = isClientPendingSavingTraffic();
-      if(PendingSavingTraffic){
-        PendingSavingTraffic = PendingSavingTraffic/1048576;
-        sumSavingTraffic += PendingSavingTraffic.toFixed(2);
-      }
-      $('#flow').text(sumSavingTraffic + "MB");
-    });
-    //本地节省流量
-    function isClientPendingSavingTraffic() {
-      var _userinfo = OupengBrowser.getUserInfo();
-      if (_userinfo) {
-          var v = JSON.parse(_userinfo);
-          return v.pending_saving_traffic ? v.pending_saving_traffic: false;
-      }
-      return false;
-    }
-})();
-//==========滚动动画 end=============
-{% endblock %}
+
+//设置分享自定义事件
+        wx.ready(function () {
+            /*发送给朋友*/
+            wx.onMenuShareAppMessage({
+                title: '我发了流量红包，快来抢啊！', // 分享标题
+                desc: '这是{$nickName}通过欧朋流量宝发的100M流量红包，点击直接抢！', // 分享描述
+                imgUrl: imgSrc, // 分享图标
+                link: '{$packet_url}',
+                success: function () {
+                    closeGuide();
+                },
+                cancel: function () {
+                    closeGuide();
+                }
+            });
+            /*分享到朋友圈*/
+            wx.onMenuShareTimeline({
+                title: '{$nickName}发了100M流量红包，快来抢啊！', // 分享标题
+                imgUrl: imgSrc, // 分享图标
+                link: '{$packet_url}',
+                success: function () {
+                    closeGuide();
+                },
+                cancel: function () {
+                    closeGuide();
+                }
+            });
+        });
+    };
+</script>
+{/if}

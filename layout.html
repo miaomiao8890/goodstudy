@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{$_page_title|escape}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <style media="handheld" type="text/css"></style>
+	<link rel="stylesheet" href="/static/css/common.css" />
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+<body>
+<div style='display:none;'>
+    <img id='wx_pic' src='{$host}/images/share-pic.png' />
+</div>
+<script type="text/javascript">
+        //判断手机型号
+        var u = navigator.userAgent, app = navigator.appVersion;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if(isiOS){
+            document.body.style.cssText="font-size:110%;"; 
+        }
+
+        var appId,nonceStr,signature,timestamp;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            console.log(xhr.readyState);
+            if(xhr.readyState == 4){
+                if((xhr.status>=200 && xhr.status<300) || xhr.status==304 ){
+                    var responseObj = JSON.parse(xhr.responseText);
+                    appId = responseObj.appId;
+                    nonceStr = responseObj.nonceStr;
+                    signature = responseObj.signature;
+                    timestamp = responseObj.timestamp;
+                    /*配置wx config*/
+                    wx.config({
+                        debug: false,
+                        appId: appId,
+                        timestamp: timestamp,
+                        nonceStr: nonceStr,
+                        signature: signature,
+                        jsApiList: [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'onMenuShareQQ',
+                            'onMenuShareWeibo',
+                            'hideMenuItems',
+                            'showMenuItems',
+                            'hideAllNonBaseMenuItem',
+                            'showAllNonBaseMenuItem',
+                            'translateVoice',
+                            'startRecord',
+                            'stopRecord',
+                            'onRecordEnd',
+                            'playVoice',
+                            'pauseVoice',
+                            'stopVoice',
+                            'uploadVoice',
+                            'downloadVoice',
+                            'chooseImage',
+                            'previewImage',
+                            'uploadImage',
+                            'downloadImage',
+                            'getNetworkType',
+                            'openLocation',
+                            'getLocation',
+                            'hideOptionMenu',
+                            'showOptionMenu',
+                            'closeWindow',
+                            'scanQRCode',
+                            'chooseWXPay',
+                            'openProductSpecificView',
+                            'addCard',
+                            'chooseCard',
+                            'openCard'
+                        ]
+                    });
+
+                    wx.error(function (res) {
+                       //alert(res.errMsg);
+                    });
+                }
+            }
+        };
+        xhr.open("get","/getConfig",true);
+        xhr.send(null);
+
+</script>
+{include="$_content_template"}
+
+</body>
+</html>
