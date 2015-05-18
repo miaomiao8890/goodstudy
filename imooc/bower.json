@@ -1,0 +1,25 @@
+{
+  "name": "imooc sunchi",
+  "version": "0.0.1",
+  "homepage": "https://github.com/miaomiao8890/goodstudy",
+  "authors": [
+    "chis <chis@oupeng.com>"
+  ],
+  "description": "this is a movie web by nodejs",
+  "keywords": [
+    "imooc",
+    "moive"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.4"
+  }
+}
