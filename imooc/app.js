@@ -29,6 +29,10 @@ app.use(session({
 var cookieParser = require('cookie-parser');
 app.use(cookieParser())
 
+//app.use(express.multipart());
+var multer  = require('multer');
+app.use(multer());
+
 app.use(express.static(path.join(__dirname, "public")));
 app.locals.moment = require("moment");
 app.listen(port);

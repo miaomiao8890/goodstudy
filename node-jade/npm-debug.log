@@ -1,0 +1,190 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'html2jade', '-g' ]
+2 info using npm@2.7.4
+3 info using node@v0.12.2
+4 silly cache add args [ 'html2jade', null ]
+5 verbose cache add spec html2jade
+6 silly cache add parsed spec { raw: 'html2jade',
+6 silly cache add   scope: null,
+6 silly cache add   name: 'html2jade',
+6 silly cache add   rawSpec: '',
+6 silly cache add   spec: '*',
+6 silly cache add   type: 'range' }
+7 verbose addNamed html2jade@*
+8 silly addNamed semver.valid null
+9 silly addNamed semver.validRange *
+10 silly addNameRange { name: 'html2jade', range: '*', hasData: false }
+11 silly mapToRegistry name html2jade
+12 silly mapToRegistry using default registry
+13 silly mapToRegistry registry https://registry.npmjs.org/
+14 silly mapToRegistry uri https://registry.npmjs.org/html2jade
+15 verbose addNameRange registry:https://registry.npmjs.org/html2jade not in flight; fetching
+16 verbose request uri https://registry.npmjs.org/html2jade
+17 verbose request no auth needed
+18 info attempt registry request try #1 at 11:35:56
+19 verbose request id 9b8cd878afa30922
+20 http request GET https://registry.npmjs.org/html2jade
+21 http 200 https://registry.npmjs.org/html2jade
+22 silly get cb [ 200,
+22 silly get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+22 silly get     etag: '"5TMQG9RFTZWLKHBAXSBJLQUAP"',
+22 silly get     'content-type': 'application/json',
+22 silly get     'cache-control': 'max-age=60',
+22 silly get     'content-length': '48383',
+22 silly get     'accept-ranges': 'bytes',
+22 silly get     date: 'Wed, 13 May 2015 03:35:58 GMT',
+22 silly get     via: '1.1 varnish',
+22 silly get     age: '0',
+22 silly get     connection: 'keep-alive',
+22 silly get     'x-served-by': 'cache-nrt6130-NRT',
+22 silly get     'x-cache': 'MISS',
+22 silly get     'x-cache-hits': '0',
+22 silly get     'x-timer': 'S1431488158.243463,VS0,VE442',
+22 silly get     vary: 'Accept' } ]
+23 verbose get saving html2jade to /Users/sunchi/.npm/registry.npmjs.org/html2jade/.cache.json
+24 silly addNameRange number 2 { name: 'html2jade', range: '*', hasData: true }
+25 silly addNameRange versions [ 'html2jade',
+25 silly addNameRange   [ '0.0.2',
+25 silly addNameRange     '0.0.3',
+25 silly addNameRange     '0.0.4',
+25 silly addNameRange     '0.0.5',
+25 silly addNameRange     '0.0.6',
+25 silly addNameRange     '0.0.7',
+25 silly addNameRange     '0.0.8',
+25 silly addNameRange     '0.1.0',
+25 silly addNameRange     '0.1.1',
+25 silly addNameRange     '0.1.2',
+25 silly addNameRange     '0.1.3',
+25 silly addNameRange     '0.1.4',
+25 silly addNameRange     '0.1.15',
+25 silly addNameRange     '0.1.16',
+25 silly addNameRange     '0.1.17',
+25 silly addNameRange     '0.1.18',
+25 silly addNameRange     '0.1.19',
+25 silly addNameRange     '0.1.20',
+25 silly addNameRange     '0.2.0',
+25 silly addNameRange     '0.2.1',
+25 silly addNameRange     '0.3.0',
+25 silly addNameRange     '0.4.0',
+25 silly addNameRange     '0.4.1',
+25 silly addNameRange     '0.4.2',
+25 silly addNameRange     '0.4.3',
+25 silly addNameRange     '0.4.4',
+25 silly addNameRange     '0.4.5',
+25 silly addNameRange     '0.5.0',
+25 silly addNameRange     '0.5.1',
+25 silly addNameRange     '0.5.2',
+25 silly addNameRange     '0.5.3',
+25 silly addNameRange     '0.6.0',
+25 silly addNameRange     '0.6.1',
+25 silly addNameRange     '0.6.2',
+25 silly addNameRange     '0.6.3',
+25 silly addNameRange     '0.6.4',
+25 silly addNameRange     '0.6.5',
+25 silly addNameRange     '0.7.0',
+25 silly addNameRange     '0.7.1',
+25 silly addNameRange     '0.7.5',
+25 silly addNameRange     '0.7.6',
+25 silly addNameRange     '0.7.7',
+25 silly addNameRange     '0.7.8',
+25 silly addNameRange     '0.8.0',
+25 silly addNameRange     '0.8.1',
+25 silly addNameRange     '0.8.2',
+25 silly addNameRange     '0.8.3' ] ]
+26 verbose addNamed html2jade@0.8.3
+27 silly addNamed semver.valid 0.8.3
+28 silly addNamed semver.validRange 0.8.3
+29 silly mapToRegistry name html2jade
+30 silly mapToRegistry using default registry
+31 silly mapToRegistry registry https://registry.npmjs.org/
+32 silly mapToRegistry uri https://registry.npmjs.org/html2jade
+33 verbose addRemoteTarball https://registry.npmjs.org/html2jade/-/html2jade-0.8.3.tgz not in flight; adding
+34 verbose addRemoteTarball [ 'https://registry.npmjs.org/html2jade/-/html2jade-0.8.3.tgz',
+34 verbose addRemoteTarball   '8344d65b2ab61e1dbf86d498e95cb438192ffa58' ]
+35 info retry fetch attempt 1 at 11:35:59
+36 info attempt registry request try #1 at 11:35:59
+37 http fetch GET https://registry.npmjs.org/html2jade/-/html2jade-0.8.3.tgz
+38 http fetch 200 https://registry.npmjs.org/html2jade/-/html2jade-0.8.3.tgz
+39 silly fetchAndShaCheck shasum 8344d65b2ab61e1dbf86d498e95cb438192ffa58
+40 verbose addTmpTarball /var/folders/nz/_6bx4pjd0c7d_4gyyjh6p4_80000gn/T/npm-34290-0fbb28dd/registry.npmjs.org/html2jade/-/html2jade-0.8.3.tgz not in flight; adding
+41 verbose addTmpTarball already have metadata; skipping unpack for html2jade@0.8.3
+42 silly cache afterAdd html2jade@0.8.3
+43 verbose afterAdd /Users/sunchi/.npm/html2jade/0.8.3/package/package.json not in flight; writing
+44 verbose afterAdd /Users/sunchi/.npm/html2jade/0.8.3/package/package.json written
+45 silly install resolved [ { name: 'html2jade',
+45 silly install resolved     description: 'HTML to Jade conversion tool',
+45 silly install resolved     version: '0.8.3',
+45 silly install resolved     author: { name: 'Don Park', email: 'donpark@docuverse.com' },
+45 silly install resolved     repository: { type: 'git', url: 'git://github.com/donpark/html2jade.git' },
+45 silly install resolved     license: 'BSD',
+45 silly install resolved     main: './lib/html2jade.js',
+45 silly install resolved     bin: { html2jade: './cli.js' },
+45 silly install resolved     scripts: { prepublish: 'coffee -c lib', test: 'mocha' },
+45 silly install resolved     dependencies: { commander: '*', he: '^0.4.1', 'jsdom-little': '^0.10.5' },
+45 silly install resolved     devDependencies: { async: '*', mocha: '*', 'coffee-script': '~1.6.3' },
+45 silly install resolved     engines: { node: '>= 0.4.0' },
+45 silly install resolved     gitHead: '142f53f7f7bead8b2bc303dcd3e582365bdb786a',
+45 silly install resolved     bugs: { url: 'https://github.com/donpark/html2jade/issues' },
+45 silly install resolved     homepage: 'https://github.com/donpark/html2jade',
+45 silly install resolved     _id: 'html2jade@0.8.3',
+45 silly install resolved     _shasum: '8344d65b2ab61e1dbf86d498e95cb438192ffa58',
+45 silly install resolved     _from: 'html2jade@*',
+45 silly install resolved     _npmVersion: '2.5.0',
+45 silly install resolved     _nodeVersion: '0.10.36',
+45 silly install resolved     _npmUser: { name: 'donpark', email: 'donpark@docuverse.com' },
+45 silly install resolved     maintainers: [ [Object] ],
+45 silly install resolved     dist:
+45 silly install resolved      { shasum: '8344d65b2ab61e1dbf86d498e95cb438192ffa58',
+45 silly install resolved        tarball: 'http://registry.npmjs.org/html2jade/-/html2jade-0.8.3.tgz' },
+45 silly install resolved     directories: {},
+45 silly install resolved     _resolved: 'https://registry.npmjs.org/html2jade/-/html2jade-0.8.3.tgz' } ]
+46 info install html2jade@0.8.3 into /usr/local/lib
+47 info installOne html2jade@0.8.3
+48 verbose installOne of html2jade to /usr/local/lib not in flight; installing
+49 verbose lock using /Users/sunchi/.npm/_locks/html2jade-d6fd0e18f1514aa2.lock for /usr/local/lib/node_modules/html2jade
+50 silly install write writing html2jade 0.8.3 to /usr/local/lib/node_modules/html2jade
+51 silly cache addNamed cb html2jade@0.8.3
+52 verbose unbuild lib/node_modules/html2jade
+53 silly gentlyRm /usr/local/lib/node_modules/html2jade is being purged from base /usr/local
+54 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/html2jade
+55 verbose tar unpack /Users/sunchi/.npm/html2jade/0.8.3/package.tgz
+56 verbose tar unpacking to /usr/local/lib/node_modules/html2jade
+57 silly gentlyRm /usr/local/lib/node_modules/html2jade is being purged
+58 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/html2jade
+59 silly gunzTarPerm modes [ '755', '644' ]
+60 error tar.unpack untar error /Users/sunchi/.npm/html2jade/0.8.3/package.tgz
+61 verbose unlock done using /Users/sunchi/.npm/_locks/html2jade-d6fd0e18f1514aa2.lock for /usr/local/lib/node_modules/html2jade
+62 verbose fstream_path /usr/local/lib/node_modules/html2jade
+63 verbose fstream_type Directory
+64 verbose fstream_class DirWriter
+65 verbose stack Error: EACCES, mkdir '/usr/local/lib/node_modules/html2jade'
+65 verbose stack     at Error (native)
+66 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+66 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+66 verbose fstream_stack FSReqWrap.oncomplete (fs.js:95:15)
+67 verbose cwd /Users/sunchi/projects/mygit/node-jade
+68 error Darwin 14.1.1
+69 error argv "node" "/usr/local/bin/npm" "install" "html2jade" "-g"
+70 error node v0.12.2
+71 error npm  v2.7.4
+72 error path /usr/local/lib/node_modules/html2jade
+73 error code EACCES
+74 error errno -13
+75 error Error: EACCES, mkdir '/usr/local/lib/node_modules/html2jade'
+75 error     at Error (native)
+75 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/html2jade']
+75 error   errno: -13,
+75 error   code: 'EACCES',
+75 error   path: '/usr/local/lib/node_modules/html2jade',
+75 error   fstream_type: 'Directory',
+75 error   fstream_path: '/usr/local/lib/node_modules/html2jade',
+75 error   fstream_class: 'DirWriter',
+75 error   fstream_stack:
+75 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+75 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+75 error      'FSReqWrap.oncomplete (fs.js:95:15)' ] }
+76 error Please try running this command again as root/Administrator.
+77 verbose exit [ -13, true ]
+78 verbose unbuild lib/node_modules/html2jade
+79 silly gentlyRm /usr/local/lib/node_modules/html2jade is being purged from base /usr/local
+80 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/html2jade

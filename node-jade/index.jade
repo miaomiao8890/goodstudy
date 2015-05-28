@@ -1,0 +1,14 @@
+extends layout
+
+block content
+	include style
+	h1 node jade study
+	script.
+		var obj = {course: "jade", level: "high"};
+		var obj2 = ["a","b"];
+		for(var i in obj2){
+			alert(i);
+		}
+	- var obj = {course: "jade", level: "high"};
+	- for (var k in obj)
+		p= obj[k]
