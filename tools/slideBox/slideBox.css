@@ -1,0 +1,8 @@
+.pv-slideBox{position:relative;overflow:hidden;}
+.pv-slideBox ul,li,img{list-style:none;border:0;margin:0;padding:0;}
+.pv-slideBox .pv-slideBox-page{position:absolute;bottom:10px;right:10px;z-index:999;}
+.pv-slideBox .pv-slideBox-page li{float:left;margin:5px;padding:2px;border:1px solid #ccc;cursor:pointer;background:#fff;color:#00317d;}
+.pv-slideBox .pv-slideBox-page span{display:block;padding:1px 5px;}
+.pv-slideBox .pv-slideBox-page .pv-i{display:block;width:50px;height:50px;}
+.pv-slideBox .pv-slideBox-page img{width:50px;height:50px;}
+.pv-slideBox .pv-slideBox-current-page{background:#0159D4;font-weight:bold;color:#FFF;}

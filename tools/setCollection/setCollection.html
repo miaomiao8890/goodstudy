@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>收藏、加入首页</title>
+</head>
+<body>
+<a id="addCollection" href="javascript:;" title="">加入收藏</a>
+<a id="setFrontPage" href="javascript:;" title="">设为首页</a>
+<script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="setCollection.js"></script>
+<script type="text/javascript">
+    $(function($){
+        $.addCollection("#addCollection");
+        $.setFrontPage("#setFrontPage");
+    })
+</script>
+</body>
+</html>

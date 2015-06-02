@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>倒计时</title>
+
+</head>
+<body>
+<button id="stop">stop</button>
+<button id="start">start</button>
+<span id="countDown"></span>
+<script type="text/javascript" src="countdown.js"></script>
+<script type="text/javascript">
+    var countDown=new CountDown({
+        dom:document.getElementById("countDown"),
+        totalSecond:10,
+        auto:true,
+		fn:function(){
+			if(countDown.totalSecond==5){
+				alert(5);
+			}
+		},
+        zeroFn:function(){
+            alert(1)
+        }
+    });
+    document.getElementById("stop").onclick= function(){
+        countDown.stop();
+    };
+    document.getElementById("start").onclick= function(){countDown.start();}
+</script>
+</body>
+</html>
